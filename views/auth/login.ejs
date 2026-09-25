@@ -3,8 +3,32 @@
 
 <div class="auth-container">
   <div class="auth-card">
-    <h1 class="auth-title">Log In</h1>
-    <p class="auth-subtitle">Welcome back! Access your sports schedule.</p>
+    <!-- Role Switcher Tabs -->
+    <div class="auth-tabs" id="roleTabs">
+      <button 
+        type="button" 
+        class="auth-tab <%= (typeof loginType === 'undefined' || loginType !== 'admin') ? 'active' : '' %>" 
+        onclick="switchLoginRole('player')"
+      >
+        <span>⚽ Player Login</span>
+      </button>
+      <button 
+        type="button" 
+        class="auth-tab <%= (typeof loginType !== 'undefined' && loginType === 'admin') ? 'active' : '' %>" 
+        onclick="switchLoginRole('admin')"
+      >
+        <span>👑 Admin Login</span>
+      </button>
+    </div>
+
+    <div id="roleHeader" class="auth-role-header">
+      <h1 class="auth-title" id="authTitle">
+        <%= (typeof loginType !== 'undefined' && loginType === 'admin') ? 'Admin Portal Log In' : 'Player Log In' %>
+      </h1>
+      <p class="auth-subtitle" id="authSubtitle">
+        <%= (typeof loginType !== 'undefined' && loginType === 'admin') ? 'Access admin controls, manage sports & view analytics' : 'Welcome back! Sign in to join & schedule sessions' %>
+      </p>
+    </div>
 
     <%- include('../partials/flash') %>
 
@@ -16,7 +40,9 @@
       </ul>
     <% } %>
 
-    <form action="/login" method="POST">
+    <form action="/login" method="POST" id="loginForm">
+      <input type="hidden" name="loginType" id="loginTypeInput" value="<%= typeof loginType !== 'undefined' ? loginType : 'player' %>">
+
       <div class="form-group">
         <label for="email" class="form-label">Email Address</label>
         <input 
@@ -42,13 +68,73 @@
         >
       </div>
 
-      <button type="submit" class="btn btn-primary btn-block btn-lg mt-1">Log In</button>
+      <!-- Quick Demo Credentials Helper -->
+      <div id="adminHelperCard" class="demo-helper-card" style="<%= (typeof loginType !== 'undefined' && loginType === 'admin') ? 'display: block;' : 'display: none;' %>">
+        <div class="demo-badge">👑 Admin Credentials</div>
+        <p class="demo-text">Email: <code>admin@sportscheduler.com</code> | Password: <code>Admin@123</code></p>
+        <button type="button" class="btn btn-outline btn-sm btn-block mt-1" onclick="fillAdminCredentials()">
+          ⚡ Auto-fill Admin Credentials
+        </button>
+      </div>
+
+      <div id="playerHelperCard" class="demo-helper-card" style="<%= (typeof loginType === 'undefined' || loginType !== 'admin') ? 'display: block;' : 'display: none;' %>">
+        <div class="demo-badge player">⚽ Player Login</div>
+        <p class="demo-text">Log in with your registered player email or sign up below.</p>
+        <button type="button" class="btn btn-outline btn-sm btn-block mt-1" onclick="fillPlayerDemo()">
+          ⚡ Fill Sample Credentials
+        </button>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block btn-lg mt-2" id="submitBtn">
+        <%= (typeof loginType !== 'undefined' && loginType === 'admin') ? 'Log In as Administrator' : 'Log In as Player' %>
+      </button>
     </form>
 
     <div class="auth-footer">
-      Don't have an account? <a href="/signup">Sign Up</a>
+      Don't have an account? <a href="/signup">Sign Up Here</a>
     </div>
   </div>
 </div>
+
+<script>
+  function switchLoginRole(role) {
+    const tabs = document.querySelectorAll('.auth-tab');
+    const input = document.getElementById('loginTypeInput');
+    const title = document.getElementById('authTitle');
+    const subtitle = document.getElementById('authSubtitle');
+    const submitBtn = document.getElementById('submitBtn');
+    const adminHelper = document.getElementById('adminHelperCard');
+    const playerHelper = document.getElementById('playerHelperCard');
+
+    input.value = role;
+
+    tabs.forEach(tab => tab.classList.remove('active'));
+    if (role === 'admin') {
+      tabs[1].classList.add('active');
+      title.innerText = 'Admin Portal Log In';
+      subtitle.innerText = 'Access admin controls, manage sports & view analytics';
+      submitBtn.innerText = 'Log In as Administrator';
+      adminHelper.style.display = 'block';
+      playerHelper.style.display = 'none';
+    } else {
+      tabs[0].classList.add('active');
+      title.innerText = 'Player Log In';
+      subtitle.innerText = 'Welcome back! Sign in to join & schedule sessions';
+      submitBtn.innerText = 'Log In as Player';
+      adminHelper.style.display = 'none';
+      playerHelper.style.display = 'block';
+    }
+  }
+
+  function fillAdminCredentials() {
+    document.getElementById('email').value = 'admin@sportscheduler.com';
+    document.getElementById('password').value = 'Admin@123';
+  }
+
+  function fillPlayerDemo() {
+    document.getElementById('email').value = 'meghanaganesuni@gmail.com';
+    document.getElementById('password').value = '123456';
+  }
+</script>
 
 <%- include('../partials/footer') %>

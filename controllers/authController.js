@@ -15,11 +15,13 @@ const postSignup = async (req, res) => {
         title: 'Sign Up',
         errors: errors.array(),
         name: req.body.name,
-        email: req.body.email
+        email: req.body.email,
+        role: req.body.role || 'player'
       });
     }
 
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
+    const userRole = role === 'admin' ? 'admin' : 'player';
 
     // Check if email already exists
     const existingUser = await User.findOne({ email: email.toLowerCase() });
@@ -28,12 +30,13 @@ const postSignup = async (req, res) => {
         title: 'Sign Up',
         errors: [{ msg: 'An account with this email already exists.' }],
         name,
-        email
+        email,
+        role: userRole
       });
     }
 
     // Create new user
-    const user = new User({ name, email, password, role: 'player' });
+    const user = new User({ name, email, password, role: userRole });
     await user.save();
 
     // Auto-login after signup
@@ -44,7 +47,11 @@ const postSignup = async (req, res) => {
       role: user.role
     };
 
-    req.session.success = 'Account created successfully! Welcome to Sports Scheduler.';
+    req.session.success = `Account created successfully as ${userRole === 'admin' ? 'Admin' : 'Player'}! Welcome to Sports Scheduler.`;
+    
+    if (user.role === 'admin') {
+      return res.redirect('/admin/dashboard');
+    }
     res.redirect('/player/dashboard');
   } catch (error) {
     console.error('Signup error:', error);
@@ -52,14 +59,16 @@ const postSignup = async (req, res) => {
       title: 'Sign Up',
       errors: [{ msg: 'An error occurred during signup. Please try again.' }],
       name: req.body.name,
-      email: req.body.email
+      email: req.body.email,
+      role: req.body.role || 'player'
     });
   }
 };
 
 // Show login page
 const getLogin = (req, res) => {
-  res.render('auth/login', { title: 'Log In', errors: [] });
+  const loginType = req.query.type || 'player';
+  res.render('auth/login', { title: 'Log In', errors: [], loginType });
 };
 
 // Handle login
@@ -70,11 +79,12 @@ const postLogin = async (req, res) => {
       return res.render('auth/login', {
         title: 'Log In',
         errors: errors.array(),
-        email: req.body.email
+        email: req.body.email,
+        loginType: req.body.loginType || 'player'
       });
     }
 
-    const { email, password } = req.body;
+    const { email, password, loginType } = req.body;
 
     // Find user by email
     const user = await User.findOne({ email: email.toLowerCase() });
@@ -82,7 +92,8 @@ const postLogin = async (req, res) => {
       return res.render('auth/login', {
         title: 'Log In',
         errors: [{ msg: 'Invalid email or password.' }],
-        email
+        email,
+        loginType: loginType || 'player'
       });
     }
 
@@ -92,7 +103,8 @@ const postLogin = async (req, res) => {
       return res.render('auth/login', {
         title: 'Log In',
         errors: [{ msg: 'Invalid email or password.' }],
-        email
+        email,
+        loginType: loginType || 'player'
       });
     }
 
@@ -104,19 +116,25 @@ const postLogin = async (req, res) => {
       role: user.role
     };
 
-    req.session.success = `Welcome back, ${user.name}!`;
-
-    // Redirect based on role
+    // Redirect based on actual user role
     if (user.role === 'admin') {
+      req.session.success = `Welcome back, Admin ${user.name}!`;
       return res.redirect('/admin/dashboard');
+    } else {
+      if (loginType === 'admin') {
+        req.session.success = `Logged in as Player (${user.email}). Note: Admin features require an Admin account.`;
+      } else {
+        req.session.success = `Welcome back, ${user.name}!`;
+      }
+      return res.redirect('/player/dashboard');
     }
-    res.redirect('/player/dashboard');
   } catch (error) {
     console.error('Login error:', error);
     res.render('auth/login', {
       title: 'Log In',
       errors: [{ msg: 'An error occurred during login. Please try again.' }],
-      email: req.body.email
+      email: req.body.email,
+      loginType: req.body.loginType || 'player'
     });
   }
 };

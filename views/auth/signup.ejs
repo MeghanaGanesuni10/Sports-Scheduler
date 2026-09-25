@@ -4,7 +4,7 @@
 <div class="auth-container">
   <div class="auth-card">
     <h1 class="auth-title">Create Account</h1>
-    <p class="auth-subtitle">Join Sports Scheduler to create & join sessions.</p>
+    <p class="auth-subtitle">Join Sports Scheduler to manage & join sports sessions.</p>
 
     <%- include('../partials/flash') %>
 
@@ -17,6 +17,20 @@
     <% } %>
 
     <form action="/signup" method="POST">
+      <div class="form-group mb-2">
+        <label class="form-label">Register Account As</label>
+        <div class="role-selector-group">
+          <label class="role-selector-option">
+            <input type="radio" name="role" value="player" <%= (typeof role === 'undefined' || role !== 'admin') ? 'checked' : '' %>>
+            <span class="role-card-btn">⚽ Player / Participant</span>
+          </label>
+          <label class="role-selector-option">
+            <input type="radio" name="role" value="admin" <%= (typeof role !== 'undefined' && role === 'admin') ? 'checked' : '' %>>
+            <span class="role-card-btn">👑 Administrator</span>
+          </label>
+        </div>
+      </div>
+
       <div class="form-group">
         <label for="name" class="form-label">Full Name</label>
         <input 
@@ -67,7 +81,7 @@
         >
       </div>
 
-      <button type="submit" class="btn btn-primary btn-block btn-lg mt-1">Sign Up</button>
+      <button type="submit" class="btn btn-primary btn-block btn-lg mt-1">Create Account</button>
     </form>
 
     <div class="auth-footer">
