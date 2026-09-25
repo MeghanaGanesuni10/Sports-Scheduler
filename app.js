@@ -69,6 +69,14 @@ app.use((req, res, next) => {
 const { getPlayerDashboard } = require('./controllers/sessionController');
 const { requireAuth } = require('./middleware/auth');
 
+// Unified dashboard route for single-link navigation
+app.get('/dashboard', requireAuth, (req, res) => {
+  if (req.session.user.role === 'admin') {
+    return res.redirect('/admin/dashboard');
+  }
+  return res.redirect('/player/dashboard');
+});
+
 // Direct player dashboard route
 app.get('/player/dashboard', requireAuth, getPlayerDashboard);
 

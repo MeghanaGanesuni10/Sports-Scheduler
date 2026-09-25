@@ -12,11 +12,7 @@
         <a href="/signup" class="btn btn-primary btn-lg">Get Started</a>
         <a href="/login" class="btn btn-outline btn-lg">Log In</a>
       <% } else { %>
-        <% if (currentUser.role === 'admin') { %>
-          <a href="/admin/dashboard" class="btn btn-primary btn-lg">Go to Admin Dashboard</a>
-        <% } else { %>
-          <a href="/player/dashboard" class="btn btn-primary btn-lg">Go to Player Dashboard</a>
-        <% } %>
+        <a href="/dashboard" class="btn btn-primary btn-lg">Go to Dashboard</a>
         <a href="/sessions" class="btn btn-outline btn-lg">Browse Sessions</a>
       <% } %>
     </div>

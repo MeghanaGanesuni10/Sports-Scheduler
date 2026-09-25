@@ -1,6 +1,6 @@
 <nav class="navbar">
   <div class="navbar-inner">
-    <a href="/" class="navbar-brand">
+    <a href="/dashboard" class="navbar-brand">
       <span class="brand-icon">⚽</span>
       <span>Sports Scheduler</span>
     </a>
@@ -9,20 +9,19 @@
 
     <ul class="navbar-links">
       <% if (currentUser) { %>
+        <li><a href="/dashboard" class="nav-link-main">📊 Dashboard</a></li>
+
         <% if (currentUser.role === 'admin') { %>
-          <li><a href="/admin/dashboard">Dashboard</a></li>
           <li><a href="/admin/sports">Sports</a></li>
-          <li><a href="/admin/sports/create">Create Sport</a></li>
+          <li><a href="/admin/sports/create">+ Add Sport</a></li>
           <li><a href="/admin/reports">Reports</a></li>
-          <li><a href="/sessions">Available Sessions</a></li>
-          <li><a href="/sessions/create">Create Session</a></li>
-          <li><a href="/sessions/my-sessions">My Sessions</a></li>
-        <% } else { %>
-          <li><a href="/player/dashboard">Dashboard</a></li>
-          <li><a href="/sessions">Available Sessions</a></li>
-          <li><a href="/sessions/create">Create Session</a></li>
-          <li><a href="/sessions/my-sessions">My Sessions</a></li>
+          <li><a href="/player/dashboard" style="color: var(--color-primary); background: var(--color-primary-bg); padding: 0.35rem 0.75rem; border-radius: var(--radius-md);">Player View ➔</a></li>
         <% } %>
+
+        <li><a href="/sessions">Available Sessions</a></li>
+        <li><a href="/sessions/create">+ Create Session</a></li>
+        <li><a href="/sessions/my-sessions">My Sessions</a></li>
+
         <li>
           <form action="/logout" method="POST" style="display: inline;">
             <button type="submit" class="btn-logout">Logout (<%= currentUser.name %>)</button>
