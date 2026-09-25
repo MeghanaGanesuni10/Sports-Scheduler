@@ -324,11 +324,34 @@ const getPlayerDashboard = async (req, res) => {
       createdBy: { $ne: userId }
     });
 
+    // Fetch top 3 upcoming available sessions
+    const recentSessions = await SportSession.find({
+      status: 'active',
+      date: { $gte: new Date(new Date().setHours(0, 0, 0, 0)) }
+    })
+      .populate('sport', 'name')
+      .populate('createdBy', 'name')
+      .populate('players', 'name')
+      .sort({ date: 1 })
+      .limit(3);
+
+    const processedSessions = recentSessions.map(session => {
+      const obj = session.toObject();
+      obj.isPast = isSessionPast(session);
+      obj.isFull = session.players.length >= session.maxPlayers;
+      obj.hasJoined = session.players.some(
+        p => p._id.toString() === userId.toString()
+      );
+      obj.availableSlots = session.maxPlayers - session.players.length;
+      return obj;
+    });
+
     res.render('player/dashboard', {
       title: 'Player Dashboard',
       availableCount,
       createdCount,
-      joinedCount
+      joinedCount,
+      recentSessions: processedSessions
     });
   } catch (error) {
     console.error('Player dashboard error:', error);

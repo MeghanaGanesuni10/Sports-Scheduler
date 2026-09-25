@@ -65,6 +65,13 @@ app.use((req, res, next) => {
   next();
 });
 
+// Import player dashboard controller
+const { getPlayerDashboard } = require('./controllers/sessionController');
+const { requireAuth } = require('./middleware/auth');
+
+// Direct player dashboard route
+app.get('/player/dashboard', requireAuth, getPlayerDashboard);
+
 // Routes
 app.use('/', authRoutes);
 app.use('/admin', adminRoutes);

@@ -27,9 +27,64 @@
 
   <div class="actions-row">
     <a href="/sessions/create" class="btn btn-primary btn-lg">+ Create Sport Session</a>
-    <a href="/sessions" class="btn btn-outline btn-lg">Browse Available Sessions</a>
+    <a href="/sessions" class="btn btn-outline btn-lg">Browse All Sessions</a>
     <a href="/sessions/my-sessions" class="btn btn-outline btn-lg">My Sessions</a>
   </div>
+
+  <h2 class="section-title mt-2">Upcoming Sessions You Can Join</h2>
+
+  <% if (typeof recentSessions !== 'undefined' && recentSessions.length > 0) { %>
+    <div class="sessions-grid">
+      <% recentSessions.forEach(session => { %>
+        <div class="session-card">
+          <div class="flex-between mb-1">
+            <span class="sport-name"><%= session.sport ? session.sport.name : 'Sport' %></span>
+            <% if (session.hasJoined) { %>
+              <span class="badge badge-joined">JOINED</span>
+            <% } else if (session.isFull) { %>
+              <span class="badge badge-full">FULL</span>
+            <% } else { %>
+              <span class="badge badge-active">ACTIVE</span>
+            <% } %>
+          </div>
+
+          <div class="session-meta">
+            <div class="session-meta-item">
+              <span class="meta-icon">📅</span>
+              <span><%= new Date(session.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) %></span>
+            </div>
+            <div class="session-meta-item">
+              <span class="meta-icon">⏰</span>
+              <span><%= session.time %></span>
+            </div>
+            <div class="session-meta-item">
+              <span class="meta-icon">📍</span>
+              <span><%= session.venue %></span>
+            </div>
+            <div class="session-meta-item">
+              <span class="meta-icon">👥</span>
+              <span><%= session.players.length %> / <%= session.maxPlayers %> Players</span>
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <a href="/sessions/<%= session._id %>" class="btn btn-outline btn-sm">View Details</a>
+            <% if (!session.hasJoined && !session.isFull) { %>
+              <form action="/sessions/<%= session._id %>/join" method="POST" style="display: inline;">
+                <button type="submit" class="btn btn-success btn-sm">Join Session</button>
+              </form>
+            <% } %>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="card empty-state">
+      <div class="empty-icon">📅</div>
+      <p>No upcoming sessions right now. Be the first to create one!</p>
+      <a href="/sessions/create" class="btn btn-primary btn-sm">Create a Session</a>
+    </div>
+  <% } %>
 </div>
 
 <%- include('../partials/footer') %>
