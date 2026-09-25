@@ -4,8 +4,10 @@
 <div class="container">
   <%- include('../partials/flash') %>
 
-  <h1 class="page-title">Player Dashboard</h1>
-  <p class="page-subtitle">Welcome back, <%= currentUser.name %>! Organize and join sports sessions.</p>
+  <div class="card pastel-amber mb-2" style="border: 2px solid #fde047;">
+    <h1 class="page-title">⚽ Player Dashboard</h1>
+    <p class="page-subtitle" style="margin-bottom: 0;">Welcome back, <strong><%= currentUser.name %></strong>! Organize, schedule, and join sports sessions.</p>
+  </div>
 
   <div class="stats-grid">
     <div class="stat-card pastel-indigo">
