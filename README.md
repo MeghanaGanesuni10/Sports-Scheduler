@@ -179,8 +179,8 @@ ADMIN_NAME=Admin
 
 1. **Clone Repository & Install Dependencies**:
    ```bash
-   git clone <repository-url>
-   cd Sports
+   git clone https://github.com/MeghanaGanesuni10/Sports-Scheduler.git
+   cd Sports-Scheduler
    npm install
    ```
 
