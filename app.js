@@ -1,7 +1,8 @@
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
-const MongoStore = require('connect-mongo');
+const mongoStoreModule = require('connect-mongo');
+const MongoStore = mongoStoreModule.default || mongoStoreModule;
 const methodOverride = require('method-override');
 const dotenv = require('dotenv');
 
