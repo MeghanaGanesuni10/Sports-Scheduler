@@ -1,0 +1,103 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<div class="container container-md">
+  <%- include('../partials/flash') %>
+
+  <h1 class="page-title">Create Sport Session</h1>
+  <p class="page-subtitle">Schedule a new game and invite players to join.</p>
+
+  <div class="card">
+    <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+      <ul class="validation-errors">
+        <% errors.forEach(err => { %>
+          <li><%= err.msg %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+
+    <form action="/sessions/create" method="POST">
+      <div class="form-group">
+        <label for="sport" class="form-label">Select Sport</label>
+        <select id="sport" name="sport" class="form-control" required>
+          <option value="">-- Choose a Sport --</option>
+          <% if (sports && sports.length > 0) { %>
+            <% sports.forEach(s => { %>
+              <option 
+                value="<%= s._id %>" 
+                <%= typeof formData !== 'undefined' && formData.sport == s._id.toString() ? 'selected' : '' %>
+              >
+                <%= s.name %>
+              </option>
+            <% }) %>
+          <% } %>
+        </select>
+        <% if (!sports || sports.length === 0) { %>
+          <div class="form-text" style="color: var(--color-warning);">No sports available. An admin must create a sport first.</div>
+        <% } %>
+      </div>
+
+      <div class="flex gap-1 flex-wrap">
+        <div class="form-group" style="flex: 1; min-width: 200px;">
+          <label for="date" class="form-label">Date</label>
+          <input 
+            type="date" 
+            id="date" 
+            name="date" 
+            class="form-control" 
+            value="<%= typeof formData !== 'undefined' ? formData.date : '' %>" 
+            required
+            min="<%= new Date().toISOString().split('T')[0] %>"
+          >
+        </div>
+
+        <div class="form-group" style="flex: 1; min-width: 200px;">
+          <label for="time" class="form-label">Time</label>
+          <input 
+            type="time" 
+            id="time" 
+            name="time" 
+            class="form-control" 
+            value="<%= typeof formData !== 'undefined' ? formData.time : '' %>" 
+            required
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="venue" class="form-label">Venue / Location</label>
+        <input 
+          type="text" 
+          id="venue" 
+          name="venue" 
+          class="form-control" 
+          value="<%= typeof formData !== 'undefined' ? formData.venue : '' %>" 
+          required 
+          placeholder="e.g. Community Center Court A, Main Stadium"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="maxPlayers" class="form-label">Maximum Players / Slots</label>
+        <input 
+          type="number" 
+          id="maxPlayers" 
+          name="maxPlayers" 
+          class="form-control" 
+          value="<%= typeof formData !== 'undefined' ? formData.maxPlayers : '10' %>" 
+          min="2" 
+          max="50" 
+          required
+        >
+        <div class="form-text">You will automatically be added as the 1st player.</div>
+      </div>
+
+      <div class="flex gap-1">
+        <button type="submit" class="btn btn-primary" <%= (!sports || sports.length === 0) ? 'disabled' : '' %>>Create Session</button>
+        <a href="/player/dashboard" class="btn btn-outline">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

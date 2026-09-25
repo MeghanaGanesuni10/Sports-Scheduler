@@ -1,0 +1,65 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<div class="container">
+  <%- include('../partials/flash') %>
+
+  <h1 class="page-title">Admin Dashboard</h1>
+  <p class="page-subtitle">Welcome back, <%= currentUser.name %>! Manage sports and view activity reports.</p>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">⚽</div>
+      <div class="stat-value"><%= sports ? sports.length : 0 %></div>
+      <div class="stat-label">Sports Created By You</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📅</div>
+      <div class="stat-value"><%= typeof totalSessions !== 'undefined' ? totalSessions : 0 %></div>
+      <div class="stat-label">Total Sessions</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🔥</div>
+      <div class="stat-value"><%= typeof activeSessions !== 'undefined' ? activeSessions : 0 %></div>
+      <div class="stat-label">Active Sessions</div>
+    </div>
+  </div>
+
+  <div class="actions-row">
+    <a href="/admin/sports/create" class="btn btn-primary">+ Create New Sport</a>
+    <a href="/admin/sports" class="btn btn-outline">View All Sports</a>
+    <a href="/admin/reports" class="btn btn-outline">View Reports</a>
+    <a href="/sessions/create" class="btn btn-success">+ Create Session</a>
+  </div>
+
+  <h2 class="section-title">Sports You Created</h2>
+
+  <% if (sports && sports.length > 0) { %>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Sport Name</th>
+            <th>Created Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% sports.forEach(sport => { %>
+            <tr>
+              <td><strong><%= sport.name %></strong></td>
+              <td><%= new Date(sport.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } else { %>
+    <div class="card empty-state">
+      <div class="empty-icon">⚽</div>
+      <p>You haven't created any sports yet.</p>
+      <a href="/admin/sports/create" class="btn btn-primary btn-sm">Create Your First Sport</a>
+    </div>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>

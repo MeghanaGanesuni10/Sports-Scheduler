@@ -1,0 +1,54 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<div class="auth-container">
+  <div class="auth-card">
+    <h1 class="auth-title">Log In</h1>
+    <p class="auth-subtitle">Welcome back! Access your sports schedule.</p>
+
+    <%- include('../partials/flash') %>
+
+    <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+      <ul class="validation-errors">
+        <% errors.forEach(err => { %>
+          <li><%= err.msg %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+
+    <form action="/login" method="POST">
+      <div class="form-group">
+        <label for="email" class="form-label">Email Address</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          class="form-control" 
+          value="<%= typeof email !== 'undefined' ? email : '' %>" 
+          required 
+          placeholder="your.email@example.com"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          class="form-control" 
+          required 
+          placeholder="••••••••"
+        >
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block btn-lg mt-1">Log In</button>
+    </form>
+
+    <div class="auth-footer">
+      Don't have an account? <a href="/signup">Sign Up</a>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

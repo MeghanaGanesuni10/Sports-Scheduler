@@ -1,0 +1,79 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<div class="container">
+  <%- include('../partials/flash') %>
+
+  <div class="flex-between mb-1">
+    <div>
+      <h1 class="page-title" style="margin-bottom: 0;">Available Sessions</h1>
+      <p class="page-subtitle">Find upcoming sports sessions and join a player slot.</p>
+    </div>
+    <a href="/sessions/create" class="btn btn-primary">+ Create Session</a>
+  </div>
+
+  <% if (sessions && sessions.length > 0) { %>
+    <div class="sessions-grid">
+      <% sessions.forEach(session => { %>
+        <div class="session-card">
+          <div class="flex-between mb-1">
+            <span class="sport-name"><%= session.sport ? session.sport.name : 'Sport' %></span>
+            
+            <% if (session.status === 'cancelled') { %>
+              <span class="badge badge-cancelled">CANCELLED</span>
+            <% } else if (session.isPast) { %>
+              <span class="badge badge-past">PAST</span>
+            <% } else if (session.hasJoined) { %>
+              <span class="badge badge-joined">JOINED</span>
+            <% } else if (session.isFull) { %>
+              <span class="badge badge-full">FULL</span>
+            <% } else { %>
+              <span class="badge badge-active">ACTIVE</span>
+            <% } %>
+          </div>
+
+          <div class="session-meta">
+            <div class="session-meta-item">
+              <span class="meta-icon">📅</span>
+              <span><%= new Date(session.date).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) %></span>
+            </div>
+            <div class="session-meta-item">
+              <span class="meta-icon">⏰</span>
+              <span><%= session.time %></span>
+            </div>
+            <div class="session-meta-item">
+              <span class="meta-icon">📍</span>
+              <span><%= session.venue %></span>
+            </div>
+            <div class="session-meta-item">
+              <span class="meta-icon">👤</span>
+              <span>Organized by <strong><%= session.createdBy ? session.createdBy.name : 'Unknown' %></strong></span>
+            </div>
+            <div class="session-meta-item">
+              <span class="meta-icon">👥</span>
+              <span><%= session.players.length %> / <%= session.maxPlayers %> Players (<%= session.availableSlots %> slots open)</span>
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <a href="/sessions/<%= session._id %>" class="btn btn-outline btn-sm">View Details</a>
+
+            <% if (session.status !== 'cancelled' && !session.isPast && !session.hasJoined && !session.isFull) { %>
+              <form action="/sessions/<%= session._id %>/join" method="POST" style="display: inline;">
+                <button type="submit" class="btn btn-success btn-sm">Join Session</button>
+              </form>
+            <% } %>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="card empty-state">
+      <div class="empty-icon">📅</div>
+      <p>No available sessions right now.</p>
+      <a href="/sessions/create" class="btn btn-primary btn-sm">Create a Session</a>
+    </div>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>

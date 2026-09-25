@@ -1,0 +1,37 @@
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="/" class="navbar-brand">
+      <span class="brand-icon">⚽</span>
+      <span>Sports Scheduler</span>
+    </a>
+
+    <button class="nav-toggle" aria-label="Toggle Navigation">&#9776;</button>
+
+    <ul class="navbar-links">
+      <% if (currentUser) { %>
+        <% if (currentUser.role === 'admin') { %>
+          <li><a href="/admin/dashboard">Dashboard</a></li>
+          <li><a href="/admin/sports">Sports</a></li>
+          <li><a href="/admin/sports/create">Create Sport</a></li>
+          <li><a href="/admin/reports">Reports</a></li>
+          <li><a href="/sessions">Available Sessions</a></li>
+          <li><a href="/sessions/create">Create Session</a></li>
+          <li><a href="/sessions/my-sessions">My Sessions</a></li>
+        <% } else { %>
+          <li><a href="/player/dashboard">Dashboard</a></li>
+          <li><a href="/sessions">Available Sessions</a></li>
+          <li><a href="/sessions/create">Create Session</a></li>
+          <li><a href="/sessions/my-sessions">My Sessions</a></li>
+        <% } %>
+        <li>
+          <form action="/logout" method="POST" style="display: inline;">
+            <button type="submit" class="btn-logout">Logout (<%= currentUser.name %>)</button>
+          </form>
+        </li>
+      <% } else { %>
+        <li><a href="/login">Log In</a></li>
+        <li><a href="/signup" class="btn btn-primary btn-sm">Sign Up</a></li>
+      <% } %>
+    </ul>
+  </div>
+</nav>

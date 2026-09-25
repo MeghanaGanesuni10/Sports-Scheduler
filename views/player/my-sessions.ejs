@@ -1,0 +1,135 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<div class="container">
+  <%- include('../partials/flash') %>
+
+  <h1 class="page-title">My Sessions</h1>
+  <p class="page-subtitle">Manage sessions you organized or joined.</p>
+
+  <!-- Created Sessions Section -->
+  <h2 class="section-title">Sessions Created By Me</h2>
+
+  <% if (createdSessions && createdSessions.length > 0) { %>
+    <div class="sessions-grid mb-2">
+      <% createdSessions.forEach(session => { %>
+        <div class="session-card">
+          <div class="flex-between mb-1">
+            <span class="sport-name"><%= session.sport ? session.sport.name : 'Sport' %></span>
+
+            <% if (session.status === 'cancelled') { %>
+              <span class="badge badge-cancelled">CANCELLED</span>
+            <% } else if (session.isPast) { %>
+              <span class="badge badge-past">PAST</span>
+            <% } else { %>
+              <span class="badge badge-active">ACTIVE</span>
+            <% } %>
+          </div>
+
+          <div class="session-meta">
+            <div class="session-meta-item">
+              <span class="meta-icon">📅</span>
+              <span><%= new Date(session.date).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) %></span>
+            </div>
+            <div class="session-meta-item">
+              <span class="meta-icon">⏰</span>
+              <span><%= session.time %></span>
+            </div>
+            <div class="session-meta-item">
+              <span class="meta-icon">📍</span>
+              <span><%= session.venue %></span>
+            </div>
+            <div class="session-meta-item">
+              <span class="meta-icon">👥</span>
+              <span><%= session.players.length %> / <%= session.maxPlayers %> Players</span>
+            </div>
+          </div>
+
+          <% if (session.status === 'cancelled' && session.cancellationReason) { %>
+            <div class="cancellation-box">
+              <h4>Cancellation Reason:</h4>
+              <p>"<%= session.cancellationReason %>"</p>
+            </div>
+          <% } %>
+
+          <div class="card-footer">
+            <a href="/sessions/<%= session._id %>" class="btn btn-outline btn-sm">Details</a>
+
+            <% if (session.status === 'active' && !session.isPast) { %>
+              <a href="/sessions/<%= session._id %>#cancel-section" class="btn btn-danger btn-sm">Cancel Session</a>
+            <% } %>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="card empty-state mb-2">
+      <p>You haven't created any sessions yet.</p>
+      <a href="/sessions/create" class="btn btn-primary btn-sm">Create a Session</a>
+    </div>
+  <% } %>
+
+  <!-- Joined Sessions Section -->
+  <h2 class="section-title">Sessions Joined By Me</h2>
+
+  <% if (joinedSessions && joinedSessions.length > 0) { %>
+    <div class="sessions-grid">
+      <% joinedSessions.forEach(session => { %>
+        <div class="session-card">
+          <div class="flex-between mb-1">
+            <span class="sport-name"><%= session.sport ? session.sport.name : 'Sport' %></span>
+
+            <% if (session.status === 'cancelled') { %>
+              <span class="badge badge-cancelled">CANCELLED</span>
+            <% } else if (session.isPast) { %>
+              <span class="badge badge-past">PAST</span>
+            <% } else { %>
+              <span class="badge badge-joined">JOINED</span>
+            <% } %>
+          </div>
+
+          <div class="session-meta">
+            <div class="session-meta-item">
+              <span class="meta-icon">📅</span>
+              <span><%= new Date(session.date).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) %></span>
+            </div>
+            <div class="session-meta-item">
+              <span class="meta-icon">⏰</span>
+              <span><%= session.time %></span>
+            </div>
+            <div class="session-meta-item">
+              <span class="meta-icon">📍</span>
+              <span><%= session.venue %></span>
+            </div>
+            <div class="session-meta-item">
+              <span class="meta-icon">👤</span>
+              <span>Organized by <strong><%= session.createdBy ? session.createdBy.name : 'Unknown' %></strong></span>
+            </div>
+            <div class="session-meta-item">
+              <span class="meta-icon">👥</span>
+              <span><%= session.players.length %> / <%= session.maxPlayers %> Players</span>
+            </div>
+          </div>
+
+          <% if (session.status === 'cancelled' && session.cancellationReason) { %>
+            <div class="cancellation-box">
+              <h4>Cancellation Reason:</h4>
+              <p>"<%= session.cancellationReason %>"</p>
+            </div>
+          <% } %>
+
+          <div class="card-footer">
+            <a href="/sessions/<%= session._id %>" class="btn btn-outline btn-sm">Details</a>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="card empty-state">
+      <p>You haven't joined any sessions created by other players.</p>
+      <a href="/sessions" class="btn btn-outline btn-sm">Browse Available Sessions</a>
+    </div>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>

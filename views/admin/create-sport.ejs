@@ -1,0 +1,41 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<div class="container container-sm">
+  <%- include('../partials/flash') %>
+
+  <h1 class="page-title">Create Sport</h1>
+  <p class="page-subtitle">Add a new sport to make it available for session creation.</p>
+
+  <div class="card">
+    <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+      <ul class="validation-errors">
+        <% errors.forEach(err => { %>
+          <li><%= err.msg %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+
+    <form action="/admin/sports/create" method="POST">
+      <div class="form-group">
+        <label for="name" class="form-label">Sport Name</label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          class="form-control" 
+          value="<%= typeof name !== 'undefined' ? name : '' %>" 
+          required 
+          placeholder="e.g. Football, Cricket, Badminton"
+        >
+      </div>
+
+      <div class="flex gap-1">
+        <button type="submit" class="btn btn-primary">Create Sport</button>
+        <a href="/admin/dashboard" class="btn btn-outline">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

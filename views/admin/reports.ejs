@@ -1,0 +1,99 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<div class="container">
+  <%- include('../partials/flash') %>
+
+  <h1 class="page-title">Session Reports</h1>
+  <p class="page-subtitle">Select a date range to generate session activity and sport popularity reports.</p>
+
+  <div class="card mb-2">
+    <form action="/admin/reports" method="GET" class="flex gap-1 flex-wrap" style="align-items: flex-end;">
+      <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 200px;">
+        <label for="from" class="form-label">From Date</label>
+        <input 
+          type="date" 
+          id="from" 
+          name="from" 
+          class="form-control" 
+          value="<%= typeof from !== 'undefined' ? from : '' %>" 
+          required
+        >
+      </div>
+
+      <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 200px;">
+        <label for="to" class="form-label">To Date</label>
+        <input 
+          type="date" 
+          id="to" 
+          name="to" 
+          class="form-control" 
+          value="<%= typeof to !== 'undefined' ? to : '' %>" 
+          required
+        >
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="height: 42px;">Generate Report</button>
+    </form>
+  </div>
+
+  <% if (reportData) { %>
+    <h2 class="section-title">Report Summary (<%= from %> to <%= to %>)</h2>
+
+    <div class="report-summary">
+      <div class="report-card">
+        <div class="report-value"><%= reportData.totalSessions %></div>
+        <div class="report-label">Total Sessions</div>
+      </div>
+      <div class="report-card">
+        <div class="report-value" style="color: var(--color-success);"><%= reportData.completedSessions %></div>
+        <div class="report-label">Completed/Played</div>
+      </div>
+      <div class="report-card">
+        <div class="report-value" style="color: var(--color-info);"><%= reportData.upcomingSessions %></div>
+        <div class="report-label">Upcoming Active</div>
+      </div>
+      <div class="report-card">
+        <div class="report-value" style="color: var(--color-danger);"><%= reportData.cancelledSessions %></div>
+        <div class="report-label">Cancelled</div>
+      </div>
+    </div>
+
+    <h2 class="section-title mt-2">Sport Popularity</h2>
+
+    <% if (reportData.sportPopularity && reportData.sportPopularity.length > 0) { %>
+      <div class="card">
+        <div class="popularity-bar-container">
+          <% 
+            const maxCount = Math.max(...reportData.sportPopularity.map(s => s.count), 1); 
+            reportData.sportPopularity.forEach(sport => {
+              const widthPct = Math.round((sport.count / maxCount) * 100);
+          %>
+            <div class="popularity-item">
+              <div class="popularity-label"><%= sport.name %></div>
+              <div class="popularity-bar-bg">
+                <div class="popularity-bar" style="width: <%= widthPct %>%;">
+                  <span class="popularity-count"><%= sport.count %> session<%= sport.count !== 1 ? 's' : '' %></span>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    <% } else { %>
+      <div class="card empty-state">
+        <p>No session data found for the selected date range.</p>
+      </div>
+    <% } %>
+
+  <% } else if (typeof from !== 'undefined' && from) { %>
+    <!-- Date range submitted but invalid or no data -->
+  <% } else { %>
+    <div class="card empty-state">
+      <div class="empty-icon">📊</div>
+      <p>Please select a date range above and click "Generate Report" to view analytics.</p>
+    </div>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,35 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<div class="container">
+  <%- include('../partials/flash') %>
+
+  <h1 class="page-title">Player Dashboard</h1>
+  <p class="page-subtitle">Welcome back, <%= currentUser.name %>! Organize and join sports sessions.</p>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">⚽</div>
+      <div class="stat-value"><%= typeof availableCount !== 'undefined' ? availableCount : 0 %></div>
+      <div class="stat-label">Available Sessions</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">✍️</div>
+      <div class="stat-value"><%= typeof createdCount !== 'undefined' ? createdCount : 0 %></div>
+      <div class="stat-label">Sessions Created By You</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🙋‍♂️</div>
+      <div class="stat-value"><%= typeof joinedCount !== 'undefined' ? joinedCount : 0 %></div>
+      <div class="stat-label">Sessions Joined By You</div>
+    </div>
+  </div>
+
+  <div class="actions-row">
+    <a href="/sessions/create" class="btn btn-primary btn-lg">+ Create Sport Session</a>
+    <a href="/sessions" class="btn btn-outline btn-lg">Browse Available Sessions</a>
+    <a href="/sessions/my-sessions" class="btn btn-outline btn-lg">My Sessions</a>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

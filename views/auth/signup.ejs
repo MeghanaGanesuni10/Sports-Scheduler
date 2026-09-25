@@ -1,0 +1,79 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<div class="auth-container">
+  <div class="auth-card">
+    <h1 class="auth-title">Create Account</h1>
+    <p class="auth-subtitle">Join Sports Scheduler to create & join sessions.</p>
+
+    <%- include('../partials/flash') %>
+
+    <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+      <ul class="validation-errors">
+        <% errors.forEach(err => { %>
+          <li><%= err.msg %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+
+    <form action="/signup" method="POST">
+      <div class="form-group">
+        <label for="name" class="form-label">Full Name</label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          class="form-control" 
+          value="<%= typeof name !== 'undefined' ? name : '' %>" 
+          required 
+          placeholder="John Doe"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="email" class="form-label">Email Address</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          class="form-control" 
+          value="<%= typeof email !== 'undefined' ? email : '' %>" 
+          required 
+          placeholder="your.email@example.com"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          class="form-control" 
+          required 
+          placeholder="At least 6 characters"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword" class="form-label">Confirm Password</label>
+        <input 
+          type="password" 
+          id="confirmPassword" 
+          name="confirmPassword" 
+          class="form-control" 
+          required 
+          placeholder="Repeat password"
+        >
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block btn-lg mt-1">Sign Up</button>
+    </form>
+
+    <div class="auth-footer">
+      Already have an account? <a href="/login">Log In</a>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

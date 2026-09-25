@@ -1,0 +1,122 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<div class="container container-md">
+  <%- include('../partials/flash') %>
+
+  <div class="card mb-2">
+    <div class="flex-between mb-1">
+      <h1 class="page-title" style="margin-bottom: 0; font-size: var(--font-size-2xl);">
+        <%= session.sport ? session.sport.name : 'Sport Session' %>
+      </h1>
+
+      <% if (session.status === 'cancelled') { %>
+        <span class="badge badge-cancelled">CANCELLED</span>
+      <% } else if (session.isPast) { %>
+        <span class="badge badge-past">PAST / COMPLETED</span>
+      <% } else if (session.isFull) { %>
+        <span class="badge badge-full">FULL</span>
+      <% } else { %>
+        <span class="badge badge-active">ACTIVE</span>
+      <% } %>
+    </div>
+
+    <div class="detail-grid mt-1">
+      <div class="detail-item">
+        <span class="detail-label">Organized By</span>
+        <span class="detail-value"><%= session.createdBy ? session.createdBy.name : 'Unknown' %></span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Venue</span>
+        <span class="detail-value"><%= session.venue %></span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Date</span>
+        <span class="detail-value"><%= new Date(session.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %></span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Time</span>
+        <span class="detail-value"><%= session.time %></span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Total Slots</span>
+        <span class="detail-value"><%= session.maxPlayers %></span>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Available Slots</span>
+        <span class="detail-value"><%= session.availableSlots %></span>
+      </div>
+    </div>
+
+    <% if (session.status === 'cancelled' && session.cancellationReason) { %>
+      <div class="cancellation-box">
+        <h4>Cancellation Reason:</h4>
+        <p>"<%= session.cancellationReason %>"</p>
+      </div>
+    <% } %>
+
+    <div class="session-players">
+      <div class="session-players-title">Players Joined (<%= session.players.length %> / <%= session.maxPlayers %>):</div>
+      <div class="player-list">
+        <% session.players.forEach(player => { %>
+          <span class="player-chip">
+            ✓ <%= player.name %>
+            <% if (player._id.toString() === session.createdBy._id.toString()) { %>
+              (Organizer)
+            <% } %>
+          </span>
+        <% }) %>
+
+        <% for (let i = 0; i < session.availableSlots; i++) { %>
+          <span class="player-chip available">○ Available Slot</span>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <% if (session.status !== 'cancelled' && !session.isPast && !session.hasJoined && !session.isFull) { %>
+        <form action="/sessions/<%= session._id %>/join" method="POST" style="display: inline;">
+          <button type="submit" class="btn btn-success btn-lg">Join Session</button>
+        </form>
+      <% } else if (session.hasJoined && !session.isCreator) { %>
+        <span class="btn btn-outline" disabled>✓ You Have Joined</span>
+      <% } else if (session.isFull && !session.hasJoined && !session.isPast && session.status !== 'cancelled') { %>
+        <span class="btn btn-outline" disabled>Session Full</span>
+      <% } else if (session.isPast) { %>
+        <span class="btn btn-outline" disabled>Past Session</span>
+      <% } %>
+
+      <a href="/sessions" class="btn btn-outline">Back to Available Sessions</a>
+    </div>
+  </div>
+
+  <!-- Cancellation Form for Creator -->
+  <% if (session.isCreator && session.status === 'active' && !session.isPast) { %>
+    <div class="cancel-form" id="cancel-section">
+      <h3>Cancel This Session</h3>
+      <p class="form-text mb-1">Cancelling will mark this session as CANCELLED for all joined players. A cancellation reason is required.</p>
+
+      <form action="/sessions/<%= session._id %>/cancel" method="POST">
+        <div class="form-group">
+          <label for="cancellationReason" class="form-label">Reason for Cancellation</label>
+          <textarea 
+            id="cancellationReason" 
+            name="cancellationReason" 
+            class="form-control" 
+            required 
+            placeholder="e.g. Bad weather, venue unavailable, conflict in schedule..."
+          ></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-danger">Confirm Cancellation</button>
+      </form>
+    </div>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>
