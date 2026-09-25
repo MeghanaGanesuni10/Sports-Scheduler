@@ -8,20 +8,37 @@
   <p class="page-subtitle">Welcome back, <%= currentUser.name %>! Organize and join sports sessions.</p>
 
   <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-icon">⚽</div>
-      <div class="stat-value"><%= typeof availableCount !== 'undefined' ? availableCount : 0 %></div>
-      <div class="stat-label">Available Sessions</div>
+    <div class="stat-card pastel-indigo">
+      <div class="stat-card-header">
+        <div class="stat-icon-badge">⚽</div>
+        <span class="badge badge-active">Available</span>
+      </div>
+      <div>
+        <div class="stat-value"><%= typeof availableCount !== 'undefined' ? availableCount : 0 %></div>
+        <div class="stat-label">Available Sessions</div>
+      </div>
     </div>
-    <div class="stat-card">
-      <div class="stat-icon">✍️</div>
-      <div class="stat-value"><%= typeof createdCount !== 'undefined' ? createdCount : 0 %></div>
-      <div class="stat-label">Sessions Created By You</div>
+
+    <div class="stat-card pastel-mint">
+      <div class="stat-card-header">
+        <div class="stat-icon-badge">🏏</div>
+        <span class="badge badge-joined">Created</span>
+      </div>
+      <div>
+        <div class="stat-value" style="color: var(--color-success);"><%= typeof createdCount !== 'undefined' ? createdCount : 0 %></div>
+        <div class="stat-label">Sessions Created By You</div>
+      </div>
     </div>
-    <div class="stat-card">
-      <div class="stat-icon">🙋‍♂️</div>
-      <div class="stat-value"><%= typeof joinedCount !== 'undefined' ? joinedCount : 0 %></div>
-      <div class="stat-label">Sessions Joined By You</div>
+
+    <div class="stat-card pastel-coral">
+      <div class="stat-card-header">
+        <div class="stat-icon-badge">🏆</div>
+        <span class="badge badge-full">Joined</span>
+      </div>
+      <div>
+        <div class="stat-value" style="color: var(--color-danger);"><%= typeof joinedCount !== 'undefined' ? joinedCount : 0 %></div>
+        <div class="stat-label">Sessions Joined By You</div>
+      </div>
     </div>
   </div>
 

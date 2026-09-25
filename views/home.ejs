@@ -3,17 +3,26 @@
 
 <div class="hero">
   <div class="hero-content">
-    <div class="hero-icon">🏆</div>
-    <h1>Sports Scheduler</h1>
-    <p>Organize sports sessions, invite players, manage venues, and track activity seamlessly in one place.</p>
+    <div class="hero-icon-cluster mb-1">
+      <span class="sport-logo-pill">⚽ Football</span>
+      <span class="sport-logo-pill">🏏 Cricket</span>
+      <span class="sport-logo-pill">🏀 Basketball</span>
+      <span class="sport-logo-pill">🎾 Tennis</span>
+      <span class="sport-logo-pill">🏸 Badminton</span>
+    </div>
+
+    <h1 style="font-size: 3.2rem; font-weight: 800; background: var(--color-primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+      Sports Scheduler
+    </h1>
+    <p class="hero-subtitle">Organize sports sessions, manage courts & venues, track player analytics, and join matches seamlessly in pastel perfection.</p>
 
     <div class="hero-actions">
       <% if (!currentUser) { %>
-        <a href="/signup" class="btn btn-primary btn-lg">Get Started</a>
-        <a href="/login" class="btn btn-outline btn-lg">Log In</a>
+        <a href="/login" class="btn btn-primary btn-lg">🚀 Launch Portal & Log In</a>
+        <a href="/signup" class="btn btn-outline btn-lg">✨ Create Account</a>
       <% } else { %>
-        <a href="/dashboard" class="btn btn-primary btn-lg">Go to Dashboard</a>
-        <a href="/sessions" class="btn btn-outline btn-lg">Browse Sessions</a>
+        <a href="/dashboard" class="btn btn-primary btn-lg">📊 Go to Dashboard</a>
+        <a href="/sessions" class="btn btn-outline btn-lg">⚽ Browse All Sessions</a>
       <% } %>
     </div>
   </div>

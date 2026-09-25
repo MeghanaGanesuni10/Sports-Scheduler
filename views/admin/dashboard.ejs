@@ -18,32 +18,61 @@
     </div>
   </div>
 
-  <!-- Key Metrics Stat Cards -->
+  <!-- Key Metrics Stat Cards (Pastel Theme) -->
   <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-icon">⚽</div>
-      <div class="stat-value"><%= typeof totalSportsCount !== 'undefined' ? totalSportsCount : 0 %></div>
-      <div class="stat-label">Total Sports</div>
+    <div class="stat-card pastel-indigo">
+      <div class="stat-card-header">
+        <div class="stat-icon-badge">⚽</div>
+        <span class="badge badge-joined">Sports</span>
+      </div>
+      <div>
+        <div class="stat-value"><%= typeof totalSportsCount !== 'undefined' ? totalSportsCount : 0 %></div>
+        <div class="stat-label">Total Sports Managed</div>
+      </div>
     </div>
-    <div class="stat-card">
-      <div class="stat-icon">📅</div>
-      <div class="stat-value"><%= typeof totalSessions !== 'undefined' ? totalSessions : 0 %></div>
-      <div class="stat-label">Total Sessions</div>
+
+    <div class="stat-card pastel-mint">
+      <div class="stat-card-header">
+        <div class="stat-icon-badge">📅</div>
+        <span class="badge badge-active">Active</span>
+      </div>
+      <div>
+        <div class="stat-value" style="color: var(--color-success);"><%= typeof activeSessions !== 'undefined' ? activeSessions : 0 %></div>
+        <div class="stat-label">Active Sessions</div>
+      </div>
     </div>
-    <div class="stat-card">
-      <div class="stat-icon">🔥</div>
-      <div class="stat-value" style="color: var(--color-success);"><%= typeof activeSessions !== 'undefined' ? activeSessions : 0 %></div>
-      <div class="stat-label">Active Sessions</div>
+
+    <div class="stat-card pastel-amber">
+      <div class="stat-card-header">
+        <div class="stat-icon-badge">🏏</div>
+        <span class="badge badge-completed">Total</span>
+      </div>
+      <div>
+        <div class="stat-value" style="color: var(--color-warning);"><%= typeof totalSessions !== 'undefined' ? totalSessions : 0 %></div>
+        <div class="stat-label">Total Sessions Scheduled</div>
+      </div>
     </div>
-    <div class="stat-card">
-      <div class="stat-icon">👥</div>
-      <div class="stat-value" style="color: var(--color-primary);"><%= typeof totalPlayers !== 'undefined' ? totalPlayers : 0 %></div>
-      <div class="stat-label">Registered Players</div>
+
+    <div class="stat-card pastel-sky">
+      <div class="stat-card-header">
+        <div class="stat-icon-badge">👥</div>
+        <span class="badge badge-joined">Players</span>
+      </div>
+      <div>
+        <div class="stat-value" style="color: var(--color-primary);"><%= typeof totalPlayers !== 'undefined' ? totalPlayers : 0 %></div>
+        <div class="stat-label">Registered Players</div>
+      </div>
     </div>
-    <div class="stat-card">
-      <div class="stat-icon">🎟️</div>
-      <div class="stat-value" style="color: var(--color-warning);"><%= typeof totalEnrollments !== 'undefined' ? totalEnrollments : 0 %></div>
-      <div class="stat-label">Total Player Joins</div>
+
+    <div class="stat-card pastel-coral">
+      <div class="stat-card-header">
+        <div class="stat-icon-badge">🏆</div>
+        <span class="badge badge-full">Joins</span>
+      </div>
+      <div>
+        <div class="stat-value" style="color: var(--color-danger);"><%= typeof totalEnrollments !== 'undefined' ? totalEnrollments : 0 %></div>
+        <div class="stat-label">Total Session Joins</div>
+      </div>
     </div>
   </div>
 
