@@ -17,8 +17,9 @@ const {
 // All session routes require authentication
 router.use(requireAuth);
 
-// Player dashboard
+// Player dashboard endpoints
 router.get('/player/dashboard', getPlayerDashboard);
+router.get('/dashboard', getPlayerDashboard);
 
 // Create session
 router.get('/create', getCreateSession);
