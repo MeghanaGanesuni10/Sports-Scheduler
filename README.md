@@ -259,4 +259,4 @@ LIVE URL:
 
 ## Author
 
-Manohar — WD501 Capstone Project
+Meghana — WD501 Capstone Project
